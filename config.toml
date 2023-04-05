@@ -1,5 +1,6 @@
 title = "Fajrian"
-baseURL = 'https://blog.ajinfajrian.id'
+#baseURL = 'https://blog.ajinfajrian.id'
+baseURL = ''
 
 # This is what goes in <html lang="">
 languageCode = 'en-us'
