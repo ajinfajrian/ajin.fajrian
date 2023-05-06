@@ -107,6 +107,11 @@ Yeayy.. You're succeed exposing behind NAT service to the internet.
 #### Extras
 If you want to connect to your home lab with ssh protocol, as a client you should have [cloudflared installed](#install-cloudflared), for both home lab server and laptop.
 
+On **server side**, enable service sshd server:
+```sh
+$ sudo systemctl enable --now sshd
+```
+
 Edit ssh configuration file on **client side**:
 ```sh
 $ vi ~/.ssh/config
