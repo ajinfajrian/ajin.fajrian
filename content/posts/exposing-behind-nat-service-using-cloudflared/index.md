@@ -55,7 +55,7 @@ $ cloudflared login
 
 Copy url on the cli, and paste it to your browser. Then choose whatever site that you want for tunneling.
 
-> Cloudflared will generate new `cert.pem` file in `~/.cloudflared` folder.
+> Cloudflared will generate a new `cert.pem` file in `~/.cloudflared` folder.
 
 #### Create Tunnel
 Create a new tunnel and pointing a subdomain to the tunnel. and make sure the subdomain doesn't exist.
@@ -91,8 +91,7 @@ read more [Ingress rules · Cloudflare Zero Trust docs](https://developers.cloud
 #### Running Cloudflared tunnel as a daemonize service
 
 ```c
-$ sudo sudo cloudflared --config /home/ajinha/.cloudflared/config.yaml service insta
-ll
+$ sudo sudo cloudflared --config /home/<your_user>/.cloudflared/config.yaml service install
 # OR
 $ sudo cloudflared service install
 $ sudo systemctl enable --now cloudflared
