@@ -15,13 +15,13 @@ Cloudflare Tunnel provides you with a secure way to connect your resources to Cl
 
 ![how cloudflare tunnel work](how-cf-work.jpg)
 
-### Prerequisites
+#### Prerequisites
 
 - Domain name
 - A Cloudflare account
 - Cloudflared service
 
-### Install Cloudflared
+### Installing Cloudflared
 
 I assume that you're already pointing your domain nameserver to Cloudflare. If you don't, you can check [cloudflare documentation](https://developers.cloudflare.com/fundamentals/get-started/setup/add-site/).
 
@@ -97,7 +97,7 @@ $ sudo cloudflared service install
 $ sudo systemctl enable --now cloudflared
 ```
 
-### Verify
+#### Verify
 
 ![idcloudhost](verify-dns.png)
 
@@ -131,11 +131,11 @@ And now test the connection by running a command to reach the service:
 $ ssh <username>@ssh.example.com
 ```
 
-### Summary
+#### Summary
 
 You can expose or access your home lab using cloudflare tunnel for free. As long as you have internet and electric power.
 
-### Sources
+#### Sources
 - [What's cloudflare tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
 - [Ingress rules · Cloudflare Zero Trust docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/local/local-management/ingress/)
 - [DNS record · Cloudflare Zero Trust docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/routing-to-tunnel/dns/)
