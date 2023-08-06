@@ -2,14 +2,14 @@
 author: "Fajrian"
 title: "[Cloudflare] Exposing behind NAT service with Cloudflare Tunnel"
 date: "2023-01-26"
-toc: true
 tags: [
     "cloudflare",
     "cloudflared tunnel",
 ]
+toc: true
 ---
 
-### What is Cloudflare Tunnel
+#### What is Cloudflare Tunnel
 
 Cloudflare Tunnel provides you with a secure way to connect your resources to Cloudflare without a publicly routable IP address. Cloudflare Tunnel can connect HTTP web servers, [SSH servers](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/use_cases/ssh/), [remote desktops](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/use_cases/rdp/), and other protocols safely to Cloudflare.
 
@@ -21,7 +21,7 @@ Cloudflare Tunnel provides you with a secure way to connect your resources to Cl
 - A Cloudflare account
 - Cloudflared service
 
-#### Install Cloudflared
+### Install Cloudflared
 
 I assume that you're already pointing your domain nameserver to Cloudflare. If you don't, you can check [cloudflare documentation](https://developers.cloudflare.com/fundamentals/get-started/setup/add-site/).
 
@@ -57,7 +57,7 @@ Copy url on the cli, and paste it to your browser. Then choose whatever site tha
 
 > Cloudflared will generate a new `cert.pem` file in `~/.cloudflared` folder.
 
-#### Create Tunnel
+### Create Tunnel
 Create a new tunnel and pointing a subdomain to the tunnel. and make sure the subdomain doesn't exist.
 
 ```sh
@@ -70,7 +70,7 @@ After you've created a tunnel, you will have a subdomain from `cfargotunnel.com`
 
 read more [DNS record · Cloudflare Zero Trust docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/routing-to-tunnel/dns/)
 
-#### Create ingress rules
+### Create ingress rules
 Maybe is a kinda reverse proxy. So incoming packets with matching rules would be forwarded to a specific port.
 
 ```yaml
@@ -88,7 +88,7 @@ ingress:
 
 read more [Ingress rules · Cloudflare Zero Trust docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/local/local-management/ingress/)
 
-#### Running Cloudflared tunnel as a daemonize service
+### Running Cloudflared tunnel as a daemonize service
 
 ```c
 $ sudo sudo cloudflared --config /home/<your_user>/.cloudflared/config.yaml service install
@@ -97,14 +97,14 @@ $ sudo cloudflared service install
 $ sudo systemctl enable --now cloudflared
 ```
 
-#### Verify
+### Verify
 
 ![idcloudhost](verify-dns.png)
 
 Yeayy.. You're succeed exposing behind NAT service to the internet.
 
 
-#### Extras
+### Extras
 If you want to connect to your home lab with ssh protocol, as a client you should have [cloudflared installed](#install-cloudflared), for both home lab server and laptop.
 
 On **server side**, enable service sshd server:
@@ -135,7 +135,7 @@ $ ssh <username>@ssh.example.com
 
 You can expose or access your home lab using cloudflare tunnel for free. As long as you have internet and electric power.
 
-### Sources:
+### Sources
 - [What's cloudflare tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
 - [Ingress rules · Cloudflare Zero Trust docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/local/local-management/ingress/)
 - [DNS record · Cloudflare Zero Trust docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/routing-to-tunnel/dns/)

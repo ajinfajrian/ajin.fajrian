@@ -51,7 +51,7 @@ enableEmoji = true
   defaultColor = "dark" # set default color mode: dark or light
   description = "Cloud Engineer and Golang Enthusiast"
   goToTop = true
-  toc = true
+  toc: true
 
 [params.author]
   avatar = "avatar.jpg" # put the file in assets folder; also ensure that image has same height and width
