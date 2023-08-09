@@ -26,6 +26,8 @@ Working within an environment where Wi-Fi access comes with a maze of permission
 $ sudo apt-get update && sudo apt-get -y upgrade && sudo apt install -y wget build-essential nano tar acl
 ```
 
+![download softether server](download-softether-server.png)
+
 ### Installing Softether Server
 1. Download softether package
 ```sh
@@ -92,7 +94,6 @@ $ sudo systemctl daemon-reload && sudo systemctl enable --now softether-vpn.serv
 ```
 
 ### Post Installation Softether Server
-
 #### Create vpn user and vpn config
 1. login ke vpncmd
 ```sh
@@ -152,9 +153,10 @@ typing hurif: SetEnumDeny # for hardening
 exit
 ```
 
-##### (Optional) 
+### Optional
 1. for mikrotik router sstp client
-- create a new `cert.key` for mikrotik
+
+create a new `cert.key` for mikrotik
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
 
@@ -167,6 +169,7 @@ VPN Server> ServerKeyGet ~/privkey.key
 ```
 
 2. Hardening web api softether
+
 Prevent anonymous user to accessing public web api softether server
 ```sh
 sudo systemctl stop softether-vpn.service
