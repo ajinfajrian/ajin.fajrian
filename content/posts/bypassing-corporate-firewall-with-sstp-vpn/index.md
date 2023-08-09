@@ -26,7 +26,7 @@ Working within an environment where Wi-Fi access comes with a maze of permission
 $ sudo apt-get update && sudo apt-get -y upgrade && sudo apt install -y wget build-essential nano tar acl
 ```
 
-<img src="download-softether-server.png" alt="download softether server" height="50%">
+<img src="download-softether-server.png" alt="download softether server" width="300" height="300">
 
 ### Installing Softether Server
 1. Download softether package
