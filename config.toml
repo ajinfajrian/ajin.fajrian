@@ -1,6 +1,6 @@
 title = "Fajrian"
-#baseURL = 'https://blog.ajinfajrian.id'
-baseURL = ''
+baseURL = 'https://blog.ajinfajrian.id'
+#baseURL = ''
 
 enableRobotsTXT = true
 
