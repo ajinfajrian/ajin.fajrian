@@ -68,6 +68,10 @@ name = "linkedin"
 url = "https://linkedin.com/in/fajrian-ichlasul"
 
 [[params.socialIcons]]
+name = "telegram"
+url = "https://t.me/ajinfajrian"
+
+[[params.socialIcons]]
 name = "email"
 url = "mailto:fajrian@ajinfajrian.id"
 
