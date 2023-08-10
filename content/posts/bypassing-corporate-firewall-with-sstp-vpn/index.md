@@ -229,7 +229,7 @@ restorecon -r -v /usr/local/vpnserver/
 ```
 
 
-### Softether Client Windows
+### Installing Softether Client Windows
 1. Download softether client from this [link](https://www.softether-download.com/en.aspx?product=softether)
 <img src="download-softether-client.png" alt="download softether client" width="700" height="450">
 
