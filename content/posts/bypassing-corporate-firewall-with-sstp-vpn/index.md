@@ -238,8 +238,7 @@ restorecon -r -v /usr/local/vpnserver/
     <img src="softether-client-installation.png" alt="download softether client">
 </div>
 
-3. Create new virtual network adapter
-
+3. Create new virtual network adapter \
 After installation's completed, then create a new virtual network adapter with name `VPN2`
 <div align="center">
     <img src="create-virtual-network-adapter.png" alt="download softether client">
