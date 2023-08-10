@@ -251,8 +251,18 @@ After installation's completed, then create a new virtual network adapter with n
 - Change `User Name` and `Password`
 - OK
 
+5. Connect to SSTP Server \
+Double click to the `Demo` panel
+
+<div align="center">
+    <img src="connected-to-sstp-server.png" alt="download softether client">
+</div>
+
+That's it, you've successfully connected to sstp server
+
+
 #### Summary
-It's only for educational purposes. The reason why DPI is implemented is to protect the device from data leaks and malware.
+It's only for educational purposes. The reason why Firewall & DPI is implemented is to protect the device from data leaks and malware.
 
 #### Source
 - https://www.kangarif.net/2020/11/cara-install-softether.html
