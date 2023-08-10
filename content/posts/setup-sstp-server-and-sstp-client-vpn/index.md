@@ -13,43 +13,41 @@ toc: true
 ### Why choose SSTP VPN
 Currently, I work in the finance industry with a high level of security system, the network engineer implement DPI(Deep Packet Inspection) in the network architecture, Which allows them to block or restrict access to certain websites, applications, and services(including SSH). 
 
-Why not choose Openvpn with port TCP/443 or SSH tunnel instead of sstp vpn? well, Openvpn and SSH tunnel are **blocked** by DPI. So it's impossible to use that protocols.
-
 The ability of SSTP to bypass firewall restrictions is not dependent on the type of firewall. It literally unblocks them just at the snap of your finger and grants you full access into the network. The SSTP cannot be blocked out because it uses TCP port 443, which is the same port HTTPS uses.
 
 #### Prerequisites
 
 - VPS with IP public
-- Port TCP/443 is open
+- Port 443/TCP is open
 
 ### Pre Installing Softether Server
 1. Upgrade & Install Depedencies
 ```sh
-$ sudo apt-get update && sudo apt-get -y upgrade && sudo apt install -y wget build-essential nano tar acl
+sudo apt-get update && sudo apt-get -y upgrade && sudo apt install -y wget build-essential nano tar acl
 ```
 
 <img src="download-softether-server.png" alt="download softether server" width="700" height="450">
 
 ### Installing Softether Server
-1. Download softether package
+1. Download softether latest version from this [link](https://www.softether-download.com/en.aspx?product=softether)
 ```sh
-$ wget "http://www.softether-download.com/files/softether/v4.34-9745-rtm-2020.04.05-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-x64-64bit.tar.gz" -O softether-vpnserver-linux.tar.gz
+wget "http://www.softether-download.com/files/softether/v4.34-9745-rtm-2020.04.05-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.34-9745-rtm-2020.04.05-linux-x64-64bit.tar.gz" -O softether-vpnserver-linux.tar.gz
 ```
 
 2. Extract softether
 ```sh
-$ tar -xvf softether-vpnserver-linux.tar.gz
+tar -xvf softether-vpnserver-linux.tar.gz
 ```
 
-3. Move the directory
+3. Move to softether directory, and build the binary
 ```sh
-$ sudo mv vpnserver /usr/local && cd /usr/local/vpnserver
-$ make
+sudo mv vpnserver /usr/local && cd /usr/local/vpnserver
+make
 ```
 
-4. Change permission
+4. Change softether config and binary permission
 ```sh
-$ chmod 600 * && chmod 700 vpnserver && chmod 700 vpncmd
+chmod 600 * && chmod 700 vpnserver && chmod 700 vpncmd
 ```
 
 5. Create user for limit permission
@@ -60,7 +58,7 @@ sudo setfacl -m user:vpn:rwx -R /usr/local/vpnserver
 
 6. Create systemd service for autostart after reboot
 ```sh
-$ sudo vi /etc/systemd/system/softether-vpn.service
+sudo vi /etc/systemd/system/softether-vpn.service
 ```
 
 ```yaml
@@ -84,22 +82,22 @@ WantedBy=multi-user.target
 ```
 
 7. Permit the binary to open port under 1024 \
-The binary will open port TCP/443 without root permission
+The binary will open port 443/TCP without root permission
 ```sh
-$ sudo setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' /usr/local/vpnserver/vpnserver
-$ sudo getcap /usr/local/vpnserver/vpnserver
+sudo setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' /usr/local/vpnserver/vpnserver
+sudo getcap /usr/local/vpnserver/vpnserver
 ```
 
 8. Reload and start service after reboot
 ```sh
-$ sudo systemctl daemon-reload && sudo systemctl enable --now softether-vpn.service
+sudo systemctl daemon-reload && sudo systemctl enable --now softether-vpn.service
 ```
 
 ### Post Installation Softether Server
 #### Create vpn user and vpn config
 1. Login to vpncmd, for system requirement checking
 ```sh
-$ bash /usr/local/vpnserver/vpncmd
+bash /usr/local/vpnserver/vpncmd
 ```
 ```sh
 1. Management of VPN Server or VPN Bridge
@@ -113,7 +111,7 @@ typing letters: exit
 
 2. Set password for administrator
 ```sh
-$ bash /usr/local/vpnserver/vpncmd
+bash /usr/local/vpnserver/vpncmd
 ```
 ```yaml
 1. Management of VPN Server or VPN Bridge
@@ -129,7 +127,7 @@ VPN Server> ServerPasswordSet
 
 3. Relogin to vpncmd, and create a virtual hub
 ```sh
-$ bash /usr/local/vpnserver/vpncmd
+bash /usr/local/vpnserver/vpncmd
 ```
 ```sh
 type 1 (management vpn server)
@@ -140,7 +138,7 @@ typing letters: SecureNatEnable
 
 4. Relogin to vpncmd, and create a user
 ```sh
-$ bash /usr/local/vpnserver/vpncmd
+bash /usr/local/vpnserver/vpncmd
 ```
 ```sh
 type 1 (management vpn server)
@@ -153,7 +151,7 @@ typing letters: UserPasswordSet ubuntu
 
 5. Relogin to vpncmd, and create a certificate
 ```sh
-$ bash /usr/local/vpnserver/vpncmd
+bash /usr/local/vpnserver/vpncmd
 ```
 ```sh
 type 1 (management vpn server)
@@ -181,7 +179,7 @@ exit
 1. for mikrotik router sstp client \
 Create a new `cert.key` for mikrotik
 ```sh
-$ bash /usr/local/vpnserver/vpncmd
+bash /usr/local/vpnserver/vpncmd
 ```
 ```sh
 type 1 (management vpn server)
@@ -202,7 +200,7 @@ sudo systemctl start softether-vpn.service
 
 3. Hardening VirtualHub with Password
 ```sh
-$ bash /usr/local/vpnserver/vpncmd
+bash /usr/local/vpnserver/vpncmd
 ```
 ```sh
 type 1 (management vpn server)
