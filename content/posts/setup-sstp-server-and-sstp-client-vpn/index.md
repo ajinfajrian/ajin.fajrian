@@ -1,6 +1,6 @@
 ---
 author: "Fajrian"
-title: "[VPN] Bypassing Corporate Firewall with SSTP VPN"
+title: "[VPN] Setup SSTP Server & SSTP Client VPN"
 date: "2023-05-12"
 tags: [
     "vpn",
@@ -13,7 +13,9 @@ toc: true
 ### Why choose SSTP VPN
 Currently, I work in the finance industry with a high level of security system, the network engineer implement DPI(Deep Packet Inspection) in the network architecture, Which allows them to block or restrict access to certain websites, applications, and services(including SSH). 
 
-Working within an environment where Wi-Fi access comes with a maze of permissions and corporate firewalls only permit communication through ports 80 and 443. and entertainment platform such as youtube, spotify, and reddit. 
+Why not choose Openvpn with port TCP/443 or SSH tunnel instead of sstp vpn? well, Openvpn and SSH tunnel are **blocked** by DPI. So it's impossible to use that protocols.
+
+The ability of SSTP to bypass firewall restrictions is not dependent on the type of firewall. It literally unblocks them just at the snap of your finger and grants you full access into the network. The SSTP cannot be blocked out because it uses TCP port 443, which is the same port HTTPS uses.
 
 #### Prerequisites
 
@@ -130,7 +132,6 @@ VPN Server> ServerPasswordSet
 $ bash /usr/local/vpnserver/vpncmd
 ```
 ```sh
-
 type 1 (management vpn server)
 typing letters: HubCreate VPN
 typing letters: Hub VPN
@@ -252,6 +253,9 @@ After installation's completed, then create a new virtual network adapter with n
 - Change `User Name` and `Password`
 - OK
 
-### Source
+#### Summary
+It's only for educational purposes. The reason why DPI is implemented is to protect the device from data leaks and malware.
+
+#### Source
 - https://www.kangarif.net/2020/11/cara-install-softether.html
 - https://protonvpn.com/blog/deep-packet-inspection

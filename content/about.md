@@ -5,4 +5,4 @@ date: '2010-02-28'
 author: Fajrian
 ---
 
-What I’ve read, what I’ve learned.
+This is the platform where I learn how to write in english and what I’ve learned about technology.
