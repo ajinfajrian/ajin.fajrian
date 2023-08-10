@@ -52,7 +52,7 @@ chmod 600 * && chmod 700 vpnserver && chmod 700 vpncmd
 
 5. Create user for limit permission
 ```sh
-sudo adduser vpn --shell /usr/sbin/nologin
+sudo useradd vpn --shell /usr/sbin/nologin
 sudo setfacl -m user:vpn:rwx -R /usr/local/vpnserver 
 ```
 
@@ -68,7 +68,7 @@ After=network-online.target
 After=dbus.service
 
 [Service]
-Type=forking
+type=forking
 User=vpn
 Group=vpn
 ExecStart=/usr/local/vpnserver/vpnserver start
@@ -97,7 +97,7 @@ sudo systemctl daemon-reload && sudo systemctl enable --now softether-vpn.servic
 #### Create vpn user and vpn config
 1. Login to vpncmd, for system requirement checking
 ```sh
-bash /usr/local/vpnserver/vpncmd
+/usr/local/vpnserver/vpncmd
 ```
 ```sh
 1. Management of VPN Server or VPN Bridge
@@ -105,13 +105,13 @@ bash /usr/local/vpnserver/vpncmd
 3. Use of VPN Tools (certificate creation and Network Traffic Speed Test Tool)
 
 typing number: 3
-typing letters: check
-typing letters: exit
+VPN Server> check
+VPN Server> exit
 ```
 
 2. Set password for administrator
 ```sh
-bash /usr/local/vpnserver/vpncmd
+/usr/local/vpnserver/vpncmd
 ```
 ```yaml
 1. Management of VPN Server or VPN Bridge
@@ -127,37 +127,48 @@ VPN Server> ServerPasswordSet
 
 3. Relogin to vpncmd, and create a virtual hub
 ```sh
-bash /usr/local/vpnserver/vpncmd
+/usr/local/vpnserver/vpncmd
 ```
 ```sh
-type 1 (management vpn server)
-typing letters: HubCreate VPN
-typing letters: Hub VPN
-typing letters: SecureNatEnable
+1. Management of VPN Server or VPN Bridge
+2. Management of VPN Client
+3. Use of VPN Tools (certificate creation and Network Traffic Speed Test Tool)
+
+typing number: 1 (management vpn server)
+VPN Server> HubCreate VPN
+VPN Server> Hub VPN
+VPN Server> SecureNatEnable
 ```
 
 4. Relogin to vpncmd, and create a user
 ```sh
-bash /usr/local/vpnserver/vpncmd
+/usr/local/vpnserver/vpncmd
 ```
 ```sh
-type 1 (management vpn server)
+1. Management of VPN Server or VPN Bridge
+2. Management of VPN Client
+3. Use of VPN Tools (certificate creation and Network Traffic Speed Test Tool)
+
+typing number: 1 (management vpn server)
 # <blank or 443 depends on your port config>
 Hostname of IP Address of Destination: ↵
 Specify Virtual Hub Name: VPN
-typing letters: UserCreate ubuntu
-typing letters: UserPasswordSet ubuntu
+VPN Server> UserCreate ubuntu
+VPN Server> UserPasswordSet ubuntu
+
+Password: <your_password>
+Confirm input: <your_password>
 ```
 
 5. Relogin to vpncmd, and create a certificate
 ```sh
-bash /usr/local/vpnserver/vpncmd
+/usr/local/vpnserver/vpncmd
 ```
 ```sh
-type 1 (management vpn server)
+typing number: 1 (management vpn server)
 Hostname of IP Address of Destination: ↵
-Specify Virtual Hub Name: VPN
-typing letters: IPsecEnable
+Specify Virtual Hub Name: ↵
+VPN Server> IPsecEnable
 
 enable l2tp: yes
 enable raw l2tp: yes
@@ -166,31 +177,16 @@ preshared key ipsec: <your_ipsec_pass>
 default virtualhub: VPN
 
 # you can write ip or dns(pointing your ip first before using dns cert)
-typing letters: ServerCertRegenerate 172.104.48.41 or sstp.ajinfajrian.id
-typing letters: ServerCertGet ~/cert.cer
-typing letters: SstpEnable yes
-typing letters: ServerKeyGet ~/privatekey.key
-typing letters: SetEnumDeny # for hardening
+VPN Server> ServerCertRegenerate 172.104.48.41 or sstp.ajinfajrian.id
+VPN Server> ServerCertGet ~/cert.cer
+VPN Server> SstpEnable yes
+VPN Server> ServerKeyGet ~/privatekey.key
 
 exit
 ```
 
 #### Optional
-1. for mikrotik router sstp client \
-Create a new `cert.key` for mikrotik
-```sh
-bash /usr/local/vpnserver/vpncmd
-```
-```sh
-type 1 (management vpn server)
-Hostname of IP Address of Destination: <blank or 443 depends on your port config>
-Specify Virtual Hub Name: VPN
-Password: <your_password>
-
-VPN Server> ServerKeyGet ~/privkey.key
-```
-
-2. Hardening web api softether \
+1. Hardening web api softether \
 Prevent anonymous user to accessing public web api softether server
 ```sh
 sudo systemctl stop softether-vpn.service
@@ -198,17 +194,18 @@ sudo sed -i 's/DisableJsonRpcWebApi false/DisableJsonRpcWebApi true/g' vpn_serve
 sudo systemctl start softether-vpn.service
 ```
 
-3. Hardening VirtualHub with Password
+2. Hardening VirtualHub with Password
 ```sh
-bash /usr/local/vpnserver/vpncmd
+/usr/local/vpnserver/vpncmd
 ```
 ```sh
-type 1 (management vpn server)
+typing number: 1 (management vpn server)
 Hostname of IP Address of Destination: <blank or 443 depends on your port config>
 Specify Virtual Hub Name: VPN
 Password: <your_password>
 
 VPN Server> SetHubPassword VPN
+VPN Server> SetEnumDeny 
 ```
 
 
