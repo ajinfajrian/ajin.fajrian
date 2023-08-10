@@ -81,7 +81,7 @@ StartLimitInterval=60
 WantedBy=multi-user.target
 ```
 
-7. Permit the binary to open port under 1024
+7. Permit the binary to open port under 1024 \
 The binary will open port TCP/443 without root permission
 ```sh
 $ sudo setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' /usr/local/vpnserver/vpnserver
@@ -177,9 +177,8 @@ exit
 ```
 
 #### Optional
-1. for mikrotik router sstp client
-
-create a new `cert.key` for mikrotik
+1. for mikrotik router sstp client \
+Create a new `cert.key` for mikrotik
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
 ```
@@ -192,8 +191,7 @@ Password: <your_password>
 VPN Server> ServerKeyGet ~/privkey.key
 ```
 
-2. Hardening web api softether
-
+2. Hardening web api softether \
 Prevent anonymous user to accessing public web api softether server
 ```sh
 sudo systemctl stop softether-vpn.service
@@ -237,6 +235,7 @@ restorecon -r -v /usr/local/vpnserver/
 <div align="center">
     <img src="softether-client-installation.png" alt="download softether client">
 </div>
+
 
 3. Create new virtual network adapter \
 After installation's completed, then create a new virtual network adapter with name `VPN2`
