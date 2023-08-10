@@ -95,47 +95,69 @@ $ sudo systemctl daemon-reload && sudo systemctl enable --now softether-vpn.serv
 
 ### Post Installation Softether Server
 #### Create vpn user and vpn config
-1. login ke vpncmd
+1. Login to vpncmd, for system requirement checking
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
 ```
-
 ```sh
 1. Management of VPN Server or VPN Bridge
 2. Management of VPN Client
 3. Use of VPN Tools (certificate creation and Network Traffic Speed Test Tool)
 
-pilih number: 3
-typing: check ### system requirement checking 
-typing: exit
+typing number: 3
+typing letters: check
+typing letters: exit
 ```
 
-2. Relogin to vpncmd, and create a virtual hub
+2. Set password for administrator
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
+```
+```yaml
+1. Management of VPN Server or VPN Bridge
+2. Management of VPN Client
+3. Use of VPN Tools (certificate creation and Network Traffic Speed Test Tool)
 
-typing a number: 1
+typing number: 1
+Hostname of IP Address of Destination: ↵
+Specify Virtual Hub Name:  ↵
+
+VPN Server> ServerPasswordSet
+```
+
+3. Relogin to vpncmd, and create a virtual hub
+```sh
+$ bash /usr/local/vpnserver/vpncmd
+```
+```sh
+
+type 1 (management vpn server)
 typing letters: HubCreate VPN
 typing letters: Hub VPN
 typing letters: SecureNatEnable
 ```
 
-3. Relogin to vpncmd, and create a user
+4. Relogin to vpncmd, and create a user
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
-
-typing a number: 1
-typing letters: Hub VPN
+```
+```sh
+type 1 (management vpn server)
+# <blank or 443 depends on your port config>
+Hostname of IP Address of Destination: ↵
+Specify Virtual Hub Name: VPN
 typing letters: UserCreate ubuntu
 typing letters: UserPasswordSet ubuntu
 ```
 
-4. Relogin to vpncmd, and create a certificate
+5. Relogin to vpncmd, and create a certificate
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
-
-typing a number: 1
-typing letters: Hub VPN
+```
+```sh
+type 1 (management vpn server)
+Hostname of IP Address of Destination: ↵
+Specify Virtual Hub Name: VPN
 typing letters: IPsecEnable
 
 enable l2tp: yes
@@ -144,22 +166,24 @@ enable ipsec: yes
 preshared key ipsec: <your_ipsec_pass>
 default virtualhub: VPN
 
+# you can write ip or dns(pointing your ip first before using dns cert)
 typing letters: ServerCertRegenerate 172.104.48.41 or sstp.ajinfajrian.id
 typing letters: ServerCertGet ~/cert.cer
 typing letters: SstpEnable yes
 typing letters: ServerKeyGet ~/privatekey.key
-typing hurif: SetEnumDeny # for hardening
+typing letters: SetEnumDeny # for hardening
 
 exit
 ```
 
-### Optional
+#### Optional
 1. for mikrotik router sstp client
 
 create a new `cert.key` for mikrotik
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
-
+```
+```sh
 type 1 (management vpn server)
 Hostname of IP Address of Destination: <blank or 443 depends on your port config>
 Specify Virtual Hub Name: VPN
@@ -180,7 +204,8 @@ sudo systemctl start softether-vpn.service
 3. Hardening VirtualHub with Password
 ```sh
 $ bash /usr/local/vpnserver/vpncmd
-
+```
+```sh
 type 1 (management vpn server)
 Hostname of IP Address of Destination: <blank or 443 depends on your port config>
 Specify Virtual Hub Name: VPN
@@ -190,8 +215,8 @@ VPN Server> SetHubPassword VPN
 ```
 
 
-### Troubleshoot 
-1. issue on selinux for rhel family
+#### Troubleshoot 
+1. Selinux context
 ```yaml
 softether.service: Failed to locate executable /usr/local/vpnserver/vpnserver: Permission denied
 SELinux is preventing /usr/lib/systemd/systemd from execute access on the file vpnserver.
@@ -204,7 +229,30 @@ restorecon -r -v /usr/local/vpnserver/
 ```
 
 
-### Download Softether Client Windows
+### Softether Client Windows
+1. Download softether client from this [link](https://www.softether-download.com/en.aspx?product=softether)
+<img src="download-softether-client.png" alt="download softether client" width="700" height="450">
+
+2. Install softether client
+<div align="center">
+    <img src="softether-client-installation.png" alt="download softether client">
+</div>
+
+3. Create new virtual network adapter
+
+After installation's completed, then create a new virtual network adapter with name `VPN2`
+<div align="center">
+    <img src="create-virtual-network-adapter.png" alt="download softether client">
+</div>
+
+4. Add VPN Connection
+<img src="sstp-client-config.png" alt="softether client config">
+- Edit `Setting Name`
+- Change with your `Hostname` and `Port Number`
+- Edit `Virtual Hub Name` to `VPN`
+- Import and `Manage Trusted CA` with your CA
+- Change `User Name` and `Password`
+- OK
 
 ### Source
 - https://www.kangarif.net/2020/11/cara-install-softether.html
