@@ -1,6 +1,6 @@
 ---
 author: "Fajrian"
-title: "[VPN] Setup SSTP Server & SSTP Client VPN"
+title: "[VPN] Bypassing a Corporate Firewall with SSTP VPN"
 date: "2023-05-12"
 tags: [
     "vpn",
@@ -259,7 +259,7 @@ That's it, you've successfully connected to sstp server
 
 
 #### Summary
-It's only for educational purposes. The reason why Firewall & DPI is implemented is to protect the device from data leaks and malware.
+Be a wise when surfing to internet with your corporate network. The reason why Firewall & DPI is implemented is to protect the device from data leaks and malware.
 
 #### Source
 - https://www.kangarif.net/2020/11/cara-install-softether.html
