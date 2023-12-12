@@ -1,3 +1,15 @@
+---
+author: "Fajrian"
+title: "[K8s] Kubernetes High Availability Control Plane"
+date: "2023-12-12"
+tags: [
+    "kubernetes",
+    "containerd",
+    "keepalived",
+]
+toc: true
+---
+
 A highly available Kubernetes cluster ensures your applications run without outages which is required for production. In this connection, there are plenty of ways for you to choose from to achieve high availability. \
 This post demonstrates how to configure Keepalived and HAproxy for load balancing and achieve high availability.
 
