@@ -26,8 +26,7 @@ This post demonstrates how to configure Keepalived and HAproxy for load balancin
 
 ### Preinstall
 ##### Setup Proxy Client (Optional)
-- Set proxy client for containerd
-This for you who have environment with restricted internet access, and only allowed access internet via proxy server. 
+Set proxy client for containerd, This for you who have environment with restricted internet access, and only allowed access internet via proxy server. 
 ```sh
 ## set proxy on containerd
 
