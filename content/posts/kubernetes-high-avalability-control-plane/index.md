@@ -10,7 +10,8 @@ tags: [
 toc: true
 ---
 
-A highly available Kubernetes cluster ensures your applications run without outages which is required for production. In this connection, there are plenty of ways for you to choose from to achieve high availability. \
+A highly available Kubernetes cluster ensures your applications run without outages which is required for production. In this connection, there are plenty of ways for you to choose from to achieve high availability. 
+
 This post demonstrates how to configure Keepalived and HAproxy for load balancing and achieve high availability.
 
 ### Lab Environment
@@ -24,9 +25,9 @@ This post demonstrates how to configure Keepalived and HAproxy for load balancin
 | jin-worker-1 | 10.20.31.21 |   8Gb/4vcpu   | Worker |
 
 
-### Preinstall
+### Pre-Installation
 ##### Setup Proxy Client (Optional)
-Set proxy client for containerd, This for you who have environment with restricted internet access, and only allowed access internet via proxy server. 
+Configure a proxy client for containerd. This is intended for those who operate in environments with restricted internet access and are only permitted to access the internet via a proxy server. 
 ```sh
 ## set proxy on containerd
 
@@ -39,7 +40,7 @@ Environment="https_proxy=http://172.28.216.125:3128"
 EOF
 ```
 ##### Disable swap
-If you have kubernetes with version [v1.22 or below]([New in Kubernetes v1.22: alpha support for using swap memory | Kubernetes](https://kubernetes.io/blog/2021/08/09/run-nodes-with-swap-alpha/)), you have to disable your swap memory for the kubelet to work properly.
+If you are using Kubernetes with version [v1.22 or below]([url](https://kubernetes.io/blog/2021/08/09/run-nodes-with-swap-alpha/)), it is necessary to disable your swap memory for the kubelet to function properly.
 ```sh
 ## disable swap on all master & worker node
 
@@ -68,8 +69,8 @@ $ sudo modprobe br_netfilter
 $ sudo sysctl --system
 ```
 
-##### Mapping hosts
-edit & mapping hostname, **execute on all master and workers**
+##### Mapping hosts (execute on all master and workers)
+Enhance the readability of your host mapping by adding the following lines:
 ```sh
 cat <<EOF | sudo tee -a /etc/hosts
 ## k8s-cluster
@@ -408,9 +409,6 @@ kube-system   cilium-vhs4r                           1/1     Running   0        
 kube-system   coredns-5dd5756b68-4vnmc               1/1     Running   0             17h
 kube-system   coredns-5dd5756b68-f9wtx               1/1     Running   0             17h
 ```
-
-### Summary
-
 
 #### Reference
 - [cilium for kubeadm (kubesimplify.com)](https://blog.kubesimplify.com/how-to-install-a-kubernetes-cluster-with-kubeadm-containerd-and-cilium-a-hands-on-guide)
