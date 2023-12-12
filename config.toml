@@ -48,7 +48,7 @@ enableEmoji = true
 [params]
   sitename = "Fajrian"
   defaultColor = "dark" # set default color mode: dark or light
-  description = "Cloud Engineer and Golang Enthusiast"
+  description = "Cloud Engineer"
   goToTop = true
   toc = true
 
