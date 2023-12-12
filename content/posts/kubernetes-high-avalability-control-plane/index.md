@@ -22,7 +22,7 @@ This post demonstrates how to configure Keepalived and HAproxy for load balancin
 
 
 ### Preinstall
-##### (Optional)
+##### Setup Proxy Client (Optional)
 - Set proxy in containerd
 This for you who have environment with restricted internet access, and only allowed access internet via proxy server. 
 ```sh
@@ -44,7 +44,7 @@ If you have kubernetes with version [v1.22 or below]([New in Kubernetes v1.22: a
 $ sudo sed -i '/ swap / s/^/#/' /etc/fstab
 $ sudo swapoff -a
 ```
-#### Kernel config
+##### Kernel config
 ```sh
 $ echo "net.ipv4.ip_nonlocal_bind=1" | sudo tee /etc/sysctl.d/ip_nonlocal_bind.conf
 
@@ -78,7 +78,7 @@ cat <<EOF | sudo tee -a /etc/hosts
 10.20.31.21 jin-worker-1
 EOF
 ```
-#### Containerd
+### Containerd
 ##### Install containerd
 Installing containerd on **all master & workers**
 ```sh
@@ -116,7 +116,7 @@ $ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/a
 $ sudo apt update -y && sudo apt -y install kubelet kubeadm kubectl
 $ sudo apt-mark hold kubelet kubeadm kubectl
 ```
-#### Create Virtual IP Address
+### Create Virtual IP Address
 Setup Virtual IP with Keepalived, we gonna use this vip as a high availability control plane
 ```sh
 ## install keepalive on all master node
@@ -180,7 +180,7 @@ PING jin-vip (10.20.31.10) 56(84) bytes of data.
 64 bytes from jin-vip (10.20.31.10): icmp_seq=1 ttl=64 time=0.017 ms
 64 bytes from jin-vip (10.20.31.10): icmp_seq=2 ttl=64 time=0.035 ms
 ```
-#### Bootstraping cluster
+### Bootstraping cluster
 Bootstraping kubernetes cluster from master-1 with virtual ip we configured before.
 ```yaml
 $ vi kubeadm-init.yaml
@@ -220,7 +220,7 @@ To start using your cluster, you need to run the following as a regular user:
 ...
 ```
 
-#### Accessing cluster
+##### Accessing cluster
 ```sh
 $ mkdir -p $HOME/.kube
 $ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -234,7 +234,7 @@ Kubernetes control plane is running at https://jin-vip:6443
 CoreDNS is running at https://jin-vip:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 ```
 
-#### Join another controlplane 
+##### Join another controlplane 
 Create token for control plane
 ```sh
 ## execute on jin-master-1
@@ -245,7 +245,7 @@ kubeadm join jin-vip:6443 --token <token> --discovery-token-ca-cert-hash <hash> 
 ```
 Copy print command to **jin-master-2** and **jin-master-3**
 
-#### Join worker to cluster
+##### Join worker to cluster
 ```sh
 ## execute on control plane (master 1/2/3)
 sudo kubeadm token create --print-join-command
@@ -263,7 +263,7 @@ jin-master-3   NotReady   control-plane   3m43s   v1.28.2
 jin-worker-1   NotReady   <none>          16m     v1.28.2
 ```
 
-#### Reconfiguring keepalived
+##### Reconfiguring keepalived
 change pgrep on **jin-master-1** from containerd to kube-apiserver
 ```sh
 sudo sed -i 's/containerd/kube-apiserver/g' /etc/keepalived/keepalived.conf
@@ -353,7 +353,7 @@ vrrp_instance kube-api {
 </tr>
 </table>
 
-#### Helm Installation
+##### Helm Installation
 Preparing to install helm binary on **all master node**
 ```sh
 curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
