@@ -3,7 +3,9 @@ author: "Fajrian"
 title: "[Home LAB] Exposing behind NAT service with Cloudflare Tunnel"
 date: "2023-01-26"
 tags: [
-  - cloudflared
+    "cloudflare",
+    "cloudflared tunnel",
+    "homelab",
 ]
 toc: true
 ---
