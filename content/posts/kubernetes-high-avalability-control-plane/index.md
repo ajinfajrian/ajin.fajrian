@@ -13,17 +13,20 @@ toc: true
 A highly available Kubernetes cluster ensures your applications run without outages which is required for production. In this connection, there are plenty of ways for you to choose from to achieve high availability. \
 This post demonstrates how to configure Keepalived and HAproxy for load balancing and achieve high availability.
 
-|    Hostname  |     IP         | Specification |
-| ------------ | -------------  | ------------- |
-| jin-master-1 | 10.20.31.11 |   4Gb/4vcpu   |
-| jin-master-2 | 10.20.31.12 |   4Gb/4vcpu   |
-| jin-master-3 | 10.20.31.13 |   4Gb/4vcpu   |
-| jin-worker-1 | 10.20.31.21 |   8Gb/4vcpu   |
+### Lab Environment
+#### Hardware Specification
+|    Hostname  |     IP         | Specification | Description |
+| ------------ | -------------  | ------------- | ------------- |
+| jin-vip | 10.20.31.10 |      | Virtual IP |
+| jin-master-1 | 10.20.31.11 |   4Gb/4vcpu   | Master |
+| jin-master-2 | 10.20.31.12 |   4Gb/4vcpu   | Master |
+| jin-master-3 | 10.20.31.13 |   4Gb/4vcpu   | Master |
+| jin-worker-1 | 10.20.31.21 |   8Gb/4vcpu   | Worker |
 
 
 ### Preinstall
 ##### Setup Proxy Client (Optional)
-- Set proxy in containerd
+- Set proxy client for containerd
 This for you who have environment with restricted internet access, and only allowed access internet via proxy server. 
 ```sh
 ## set proxy on containerd
@@ -406,6 +409,8 @@ kube-system   cilium-vhs4r                           1/1     Running   0        
 kube-system   coredns-5dd5756b68-4vnmc               1/1     Running   0             17h
 kube-system   coredns-5dd5756b68-f9wtx               1/1     Running   0             17h
 ```
+
+### Summary
 
 
 #### Reference
