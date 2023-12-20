@@ -1,6 +1,6 @@
 ---
 author: "Fajrian"
-title: "[Home LAB] Exposing behind NAT service with Cloudflare Tunnel"
+title: "Exposing behind NAT service with Cloudflare Tunnel"
 date: "2023-01-26"
 tags: [
     "cloudflare",
@@ -132,7 +132,7 @@ And now test the connection by running a command to reach the service:
 $ ssh <username>@ssh.example.com
 ```
 
-#### Summary
+#### Conclusion
 
 You can expose or access your home lab using cloudflare tunnel for free. As long as you have internet and electric power.
 

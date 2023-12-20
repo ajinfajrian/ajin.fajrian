@@ -1,6 +1,6 @@
 ---
 author: "Fajrian"
-title: "[VPN] Bypassing a Corporate Firewall with SSTP VPN"
+title: "Bypassing a Corporate Firewall with SSTP VPN"
 date: "2023-05-12"
 tags: [
     "vpn",
@@ -258,7 +258,7 @@ Double click to the `Demo` panel
 That's it, you've successfully connected to sstp server
 
 
-#### Summary
+#### Conclusion
 Be a wise when surfing to internet with your corporate network. The reason why Firewall & DPI is implemented is to protect the device from data leaks and malware.
 
 #### Source

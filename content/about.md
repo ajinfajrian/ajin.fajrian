@@ -1,8 +1,8 @@
 ---
-title: About
+title: about
 description: 'Hugo, the world''s fastest framework for building websites'
 date: '2010-02-28'
 author: Fajrian
 ---
 
-My personal notes / ngoprek 😄
+This is my personal notes 
