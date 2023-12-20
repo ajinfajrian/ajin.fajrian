@@ -1,4 +1,4 @@
 ---
-title: "home"
+title: "Home"
 author : "Hugo Authors"
 ---

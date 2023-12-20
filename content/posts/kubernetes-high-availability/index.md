@@ -9,6 +9,8 @@ tags: [
     "high availability",
 ]
 toc: true
+## disable draft, if finished
+draft: true
 ---
 
 Hello, just finished my playground lab about implement kubernetes high availability control plane with **kube-vip mode bgp**, and today i'm will write 
