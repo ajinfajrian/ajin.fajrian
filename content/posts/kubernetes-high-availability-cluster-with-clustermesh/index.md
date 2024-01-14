@@ -18,8 +18,12 @@ cilium clustermesh can works as active-active high availability cluster, Upon fa
 
 <div align="center">
     <img src="cilium_ha.jpg" alt="cilium high availability cluster">
-    [Use Case: High Availability](cilium.io/static/04d2d06e7e32665b74c968a9f7fc0a40/832a9/usecase_ha.png)
 </div>
+
+<center>
+
+[Use Case: High Availability](cilium.io/static/04d2d06e7e32665b74c968a9f7fc0a40/832a9/usecase_ha.png)
+</center>
 
 ### Prerequisites
 
