@@ -529,10 +529,10 @@ cilium connectivity test --context $CLUSTER1 --multi-cluster $CLUSTER2
 $ kubectl exec -it -n kube-system daemonsets/cilium -c cilium-agent -- cilium node list
 
 Name                                IPv4 Address   Endpoint CIDR   IPv6 Address   Endpoint CIDR
-cluster-ayk/jin-ayaka-master-1    10.7.0.4    10.242.0.0/24
-cluster-ayk/jin-ayaka-worker-1    10.7.0.5    10.242.1.0/24
-cluster-kzh/jin-kazuha-master-1   10.7.0.2    10.244.0.0/24
-cluster-kzh/jin-kazuha-worker-1   10.7.0.3    10.244.1.0/24
+cluster-kzh/jin-kazuha-master-1       10.7.0.2     10.244.0.0/24
+cluster-kzh/jin-kazuha-worker-1       10.7.0.3     10.244.1.0/24
+cluster-ayk/jin-ayaka-master-1        10.7.0.4     10.242.0.0/24
+cluster-ayk/jin-ayaka-worker-1        10.7.0.5     10.242.1.0/24
 ```
 
 ####  Create sample deployment for drc
