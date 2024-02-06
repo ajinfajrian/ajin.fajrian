@@ -14,7 +14,7 @@ draft: true
 ---
 after long time never had motivation to write a post. recently, i have some interest on high availability. \
 
-cilium clustermesh can works as active-active high availability cluster, Upon failure, requests can fail over to other clusters.
+cilium clustermesh can works as active-active high availability cluster, upon failure, requests can fail over to other clusters.
 
 <div align="center">
     <img src="cilium_ha.jpg" alt="cilium high availability cluster">
@@ -40,9 +40,8 @@ for point 3, i will use wireguard tunnel for connection between each other clust
 for this setup, cilium clustermesh was running on top of 2 hetzner dedicated hosts i borrow from my office, thanks to [btech](https://btech.id/en/). 
 
 for testing purpose only, i will go with 2 cluster, 1 master and 1 worker for each cluster.
-```sh
+```sh                                               
                             +--------------------+                             
-                            |                    |                             
                             |  Wireguard Server  | Public IP:                  
                             |    wg0: 10.7.0.1   | 194.35.12.114               
                             |                    |                             
@@ -53,25 +52,24 @@ for testing purpose only, i will go with 2 cluster, 1 master and 1 worker for ea
 |       KVM Virtualization |           |           |       KVM Virtualization |
 |    +--------------------+|           |           |+--------------------+    |
 |    |jin-kazuha-master-1 ||           |           ||jin-ayaka-master-1  |    |
-| +--| ens3: 10.48.10.11  ||           |           || ens3: 10.20.31.11  |--+ |
-| |  |   wg0: 10.7.0.2    || +---------|---------+ ||  wg0: 10.7.0.4     |  | |
-| |  +--------------------+|           |           |+--------------------+  | |
+| +--|   wg0: 10.7.0.2    ||           |           ||  wg0: 10.7.0.4     |--+ |
+| |  +--------------------+| +---------|---------+ |+--------------------+  | |
+| |                        |           |           |                        | |
 | |  +--------------------+|           |           |+--------------------+  | |
 | |  |jin-kazuha-worker-1 ||           |           ||jin-ayaka-worker-1  |  | |
-| |--| ens3: 10.48.10.21  ||           |           || ens3: 10.20.31.21  |--| |
-|    |   wg0: 10.7.0.3    || +---------|---------+ ||   wg0: 10.7.0.5    |    |
-|    +--------------------+|                       |+--------------------+    |
-+--------------------------+                       +--------------------------+```
+| |--|   wg0: 10.7.0.3    ||           |           ||   wg0: 10.7.0.5    |--| |
+|    +--------------------+| +---------|---------+ |+--------------------+    |
++--------------------------+                       +--------------------------+
 ```
 
-|  Wireguard IP | Upstream IP |      Hostname       | Cluster Name | POD CIDR | Service CIDR |
-| ------------- | ----------- | ------------------- | ------------ | ------- | ------- |
-|    10.7.0.2   | 10.48.10.11 | jin-kazuha-master-1 |    Kazuha    | 10.244.0.0/16 | 10.94.0.0/16 |
-|    10.7.0.3   | 10.48.10.21 | jin-kazuha-worker-1 |    Kazuha    | ^^ | ^^ |
-|    10.7.0.4   | 10.20.31.11 | jin-ayaka-master-1  |     Ayaka    | 10.242.0.0/16 | 10.92.0.0/16 |
-|    10.7.0.5   | 10.20.31.21 | jin-ayaka-worker-1  |     Ayaka    | ^^ | ^^ |
+|  Wireguard IP |      Hostname       | Cluster Name | POD CIDR | Service CIDR |
+| ------------- |  ------------------ | ------------ | ------- | ------- |
+|    10.7.0.2   | jin-kazuha-master-1 |    Kazuha    | 10.244.0.0/16 | 10.94.0.0/16 |
+|    10.7.0.3   | jin-kazuha-worker-1 |    Kazuha    | ^^ | ^^ |
+|    10.7.0.4   | jin-ayaka-master-1  |     Ayaka    | 10.242.0.0/16 | 10.92.0.0/16 |
+|    10.7.0.5   | jin-ayaka-worker-1  |     Ayaka    | ^^ | ^^ |
 
-ayaka and kazuha clusters can connect each other with wireguard ip (wg0). and control plane api will use ip upstream (ens3) to bootstraping cluster.
+ayaka and kazuha clusters can connect each other with wireguard ip (wg0). 
 
 #### Pre Installation
 enable overlay and br_netfilter kernel modules.
@@ -100,22 +98,22 @@ sudo sysctl --system
 mapping ip and hostname for all instances on ayaka cluster.
 ```sh
 cat <<EOF | sudo tee -a /etc/hosts
-## ayaka clusters (ens3)
-10.20.31.11 jin-ayaka-master-1
-10.20.31.21 jin-ayaka-worker-1
+## ayaka clusters (wg0)
+10.7.0.4 jin-ayaka-master-1
+10.7.0.5 jin-ayaka-worker-1
 
 ## kazuha clustermesh (wg0)
-10.7.0.6 jin-kazuha-master-1
-10.7.0.7 jin-kazuha-worker-1
+10.7.0.2 jin-kazuha-master-1
+10.7.0.3 jin-kazuha-worker-1
 EOF
 ```
 
 mapping ip and hostname for kazuha cluster as well.
 ```sh
 cat <<EOF | sudo tee -a /etc/hosts
-## ayaka clusters (ens3)
-10.48.10.11 jin-kazuha-master-1
-10.48.10.21 jin-kazuha-worker-1
+## ayaka clusters (wg0)
+10.7.0.2 jin-kazuha-master-1
+10.7.0.3 jin-kazuha-worker-1
 
 ## kazuha clustermesh (wg0)
 10.7.0.4 jin-ayaka-master-1
@@ -157,7 +155,6 @@ apiServer:
   certSANs:
   - 127.0.0.1
   - localhost
-  - 10.20.31.10 # kube-vip 
   extraArgs:
     authorization-mode: Node,RBAC
     enable-aggregator-routing: "true"
@@ -187,8 +184,7 @@ clusterName: cluster-kzh
 apiServer:
   certSANs:
   - 127.0.0.1
-  - localhost
-  - 10.48.10.10 # kube-vip 
+  - localhost 
   extraArgs:
     authorization-mode: Node,RBAC
     enable-aggregator-routing: "true"
@@ -224,13 +220,44 @@ by default, kubernetes cluster will use `kubernetes-admin` as their serviceaccou
 [for more](https://devopscube.com/kubernetes-kubeconfig-file/)
 ```sh
 ## execute on master 1 ayaka
-sudo kubeadm kubeconfig user --config kubeadm-init.yaml --client-name=kubernetes-admin-ayk --org=system:masters | tee ~/.kube/config
+sudo kubeadm kubeconfig user --config kubeadm-init.yaml --client-name=kubernetes-admin-ayk --org=system:masters | tee ~/.kube/config-ayk
 
 ## execute on master 1 kazuha
-sudo kubeadm kubeconfig user --config kubeadm-init.yaml --client-name=kubernetes-admin-kzh --org=system:masters | tee ~/.kube/config
+sudo kubeadm kubeconfig user --config kubeadm-init.yaml --client-name=kubernetes-admin-kzh --org=system:masters | tee ~/.kube/config-kzh
+```
+copy kubeconfig file to each cluster.
+```sh
+## execute on master node cluster ayk, copy and set persistent
+scp jin-kazuha-master-1:~/.kube/config-kzh ~/.kube/config-kzh
+cat <<EOF | tee -a ~/.bashrc
+export KUBECONFIG=~/.kube/config-ayk:~/.kube/config-kzh
+EOF
+source ~/.bashrc
+
+## execute on master node cluster kzh, copy and set persistent
+scp jin-ayaka-master-1:~/.kube/config-ayk ~/.kube/config-ayk
+cat <<EOF | tee -a ~/.bashrc
+export KUBECONFIG=~/.kube/config-kzh:~/.kube/config-ayk
+EOF
+source ~/.bashrc
 ```
 
-Add autocompletion on all master as well
+testing get context across multiple cluster.
+```sh
+## ayaka clusters
+jin-ayaka-master-1:~$ kubectl config get-contexts
+CURRENT   NAME                               CLUSTER       AUTHINFO               NAMESPACE
+*         kubernetes-admin-ayk@cluster-ayk   cluster-ayk   kubernetes-admin-ayk
+          kubernetes-admin-kzh@cluster-kzh   cluster-kzh   kubernetes-admin-kzh
+
+## kazuha clusters
+jin-kazuha-master-1:~$ kubectl config get-contexts
+CURRENT   NAME                               CLUSTER       AUTHINFO               NAMESPACE
+          kubernetes-admin-ayk@cluster-ayk   cluster-ayk   kubernetes-admin-ayk
+*         kubernetes-admin-kzh@cluster-kzh   cluster-kzh   kubernetes-admin-kzh
+```
+
+add kubernetes autocompletion on all master, to make your life easier.
 ```sh
 cat <<EOF | tee -a ~/.bashrc
 ## kubernetes auto-completion
@@ -251,8 +278,8 @@ source ~/.bashrc
 sudo kubeadm token create --print-join-command
 
 ## execute on ayaka worker
-kubeadm join jin-ayaka-master-1:6443 --token <token> \
-        --discovery-token-ca-cert-hash <random_hash>
+kubeadm join jin-ayaka-master-1:6443 --token c0jqdh.nids9zp2qpv2pe6k \ 
+--discovery-token-ca-cert-hash sha256:55ffcbcc83f955d8e54dab35ada58fbed9e941bed9ca1267a1010368352c51c7
 ```
 
 - Join worker to kazuha cluster
@@ -261,8 +288,8 @@ kubeadm join jin-ayaka-master-1:6443 --token <token> \
 sudo kubeadm token create --print-join-command
 
 ## execute on kazuha worker
-kubeadm join jin-kazuha-master-1:6443 --token <token> \
-        --discovery-token-ca-cert-hash <random_hash>
+kubeadm join jin-kazuha-master-1:6443 --token 7zl2tq.rzriprwt6gvr6b3c \ 
+--discovery-token-ca-cert-hash sha256:1a7e036f4904ca00dce2c211abf99fb4408bca4c36de7130c3716aff899d535a
 ```
 
 #### Results after bootstraping cluster
@@ -279,24 +306,7 @@ NAME                    STATUS     ROLES           AGE   VERSION
 jin-kazuha-master-1   NotReady   control-plane   54m   v1.28.2
 jin-kazuha-worker-1   NotReady   <none>          45m   v1.28.2
 ```
-###### Create context
-```sh
-## cluster ayaka
-sudo kubeadm kubeconfig user --config kubeadm-init.yaml --client-name=kubernetes-admin-ayk --org=system:masters | tee ~/.kube/config-ayk
 
-## cluster kazuha
-sudo kubeadm kubeconfig user --config kubeadm-init.yaml --client-name=kubernetes-admin-kzh --org=system:masters | tee ~/.kube/config-kzh
-```
-
-```sh
-## execute on master node cluster ayk
-scp jin-kazuha-master-1:~/.kube/ ~/.kube/config-kzh
-export KUBECONFIG=~/.kube/config:~/.kube/config-kzh
-
-## execute on master node cluster kzh
-scp jin-ayaka-master-1:~/.kube ~/.kube/config-ayk
-export KUBECONFIG=~/.kube/config:~/.kube/config-ayk
-```
 #### 3. Create helm for installing cilium cni
 
 #### Installing cilium cli **all master node**
@@ -376,13 +386,11 @@ proxy:
     enabled: false
 localRedirectPolicy: true
 k8s-require-ipv4-pod-cidr: true
-externalWorkloads:
-  enabled: true
-tunnel: vxlan ## tunnel / tunnel-protocol:
+tunnel-protocol: vxlan ## tunnel / tunnel-protocol
 ```
 ###### Installing Cilium CNI on ayaka Cluster
 ```sh
-helm install -n kube-system cilium cilium/cilium --version 1.14.4 -f cilium.yaml
+helm install -n kube-system cilium cilium/cilium --version 1.14.5 -f cilium.yaml
 ```
 
 ###### Helm values for kazuha Cluster
@@ -436,21 +444,24 @@ proxy:
     enabled: false
 localRedirectPolicy: true
 k8s-require-ipv4-pod-cidr: true
-externalWorkloads:
-  enabled: true
-tunnel: vxlan ## tunnel / tunnel-protocol:
+tunnel-protocol: vxlan ## tunnel / tunnel-protocol
 ```
+
+> Notes:
+cluster.name & cluster.id must have unique attributes.
+
 ###### Installing Cilium CNI on kazuha Cluster
 ```sh
-helm install -n kube-system cilium cilium/cilium --version 1.14.4 -f cilium.yaml
+helm install -n kube-system cilium cilium/cilium --version 1.14.5 -f cilium.yaml
 ```
-###### Create variable environment for cluster ayaka & cluster kazuha
+###### Create variable environment for cluster ayaka
 ```sh
+## execute on cluster ayaka
 CLUSTER1=kubernetes-admin-ayk@cluster-ayk
 CLUSTER2=kubernetes-admin-kzh@cluster-kzh
 ```
 ###### Enable clustermesh on cluster ayaka
-Im gonna use NodePort service type for exposing `clustermesh-apiserver`. 
+Im gonna use NodePort service type for exposing deployment `clustermesh-apiserver`. 
 ```sh 
 cilium clustermesh enable --context $CLUSTER1 --service-type NodePort
 ```
@@ -461,7 +472,7 @@ cilium clustermesh status
 ⚠  Service type NodePort detected! Service may fail when nodes are removed from the cluster!
 ✅ Service "clustermesh-apiserver" of type "NodePort" found
 ✅ Cluster access information is available:
-  - 10.20.31.11:32379
+  - 10.7.0.4:32379
 ✅ Deployment clustermesh-apiserver is ready
 🔌 No cluster connected
 🔀 Global services: [ min:0 / avg:0.0 / max:0 ]
@@ -498,12 +509,12 @@ cilium clustermesh connect --context $CLUSTER1 --destination-context $CLUSTER2
 
 #### Verifying clustermesh
 ```sh
-$ cilium clustermesh status --context $CLUSTER1
+cilium clustermesh status --context $CLUSTER1
 
 ⚠️  Service type NodePort detected! Service may fail when nodes are removed from the cluster!
 Service "clustermesh-apiserver" of type "NodePort" found
 ✅ Cluster access information is available: 
-- 10.20.31.11:32379
+- 10.7.0.4:32379
 ✅ Deployment clustermesh-apiserver is ready
 ✅ All 2 nodes are connected to all clusters [min:1 / avg:1.0 / max:1]
 🔌 Cluster Connections:
@@ -518,10 +529,10 @@ cilium connectivity test --context $CLUSTER1 --multi-cluster $CLUSTER2
 $ kubectl exec -it -n kube-system daemonsets/cilium -c cilium-agent -- cilium node list
 
 Name                                IPv4 Address   Endpoint CIDR   IPv6 Address   Endpoint CIDR
-cluster-ayk/jin-ayaka-master-1    10.20.31.11    10.242.0.0/24
-cluster-ayk/jin-ayaka-worker-1    10.20.31.12    10.242.1.0/24
-cluster-kzh/jin-kazuha-master-1   10.20.31.21    10.244.0.0/24
-cluster-kzh/jin-kazuha-worker-1   10.20.31.22    10.244.1.0/24
+cluster-ayk/jin-ayaka-master-1    10.7.0.4    10.242.0.0/24
+cluster-ayk/jin-ayaka-worker-1    10.7.0.5    10.242.1.0/24
+cluster-kzh/jin-kazuha-master-1   10.7.0.2    10.244.0.0/24
+cluster-kzh/jin-kazuha-worker-1   10.7.0.3    10.244.1.0/24
 ```
 
 ####  Create sample deployment for drc
