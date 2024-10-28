@@ -50,13 +50,7 @@ make
 chmod 600 * && chmod 700 vpnserver && chmod 700 vpncmd
 ```
 
-5. Create user for limit permission
-```sh
-sudo useradd vpn --shell /usr/sbin/nologin
-sudo setfacl -m user:vpn:rwx -R /usr/local/vpnserver 
-```
-
-6. Create systemd service for autostart after reboot
+5. Create systemd service for autostart after reboot
 ```sh
 sudo vi /etc/systemd/system/softether-vpn.service
 ```
@@ -70,8 +64,6 @@ After=dbus.service
 [Service]
 Type=forking
 TimeoutStartSec=300
-User=vpn
-Group=vpn
 ExecStart=/usr/local/vpnserver/vpnserver start
 ExecReload=/bin/kill -HUP $MAINPID
 
@@ -79,14 +71,7 @@ ExecReload=/bin/kill -HUP $MAINPID
 WantedBy=multi-user.target
 ```
 
-7. Permit the binary to open port under 1024 \
-The binary will open port 443/TCP without root permission
-```sh
-sudo setcap 'CAP_NET_BIND_SERVICE=+eip CAP_NET_RAW=+eip' /usr/local/vpnserver/vpnserver
-sudo getcap /usr/local/vpnserver/vpnserver
-```
-
-8. Reload and start service after reboot
+6. Reload and start service after reboot
 ```sh
 sudo systemctl daemon-reload && sudo systemctl enable --now softether-vpn.service
 ```
