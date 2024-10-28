@@ -68,14 +68,12 @@ After=network-online.target
 After=dbus.service
 
 [Service]
-type=forking
+Type=forking
+TimeoutStartSec=300
 User=vpn
 Group=vpn
 ExecStart=/usr/local/vpnserver/vpnserver start
 ExecReload=/bin/kill -HUP $MAINPID
-# Maximum number of restart is 5, and attempts for every 60 seconds
-StartLimitBurst=5
-StartLimitInterval=60
 
 [Install]
 WantedBy=multi-user.target
