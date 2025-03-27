@@ -48,7 +48,7 @@ enableEmoji = true
 [params]
   sitename = "Fajrian"
   defaultColor = "light" # set default color mode: dark or light
-  description = "Cloud Engineer"
+  description = "SRE & Cloud Engineer"
   goToTop = true
   toc = true
 
@@ -57,7 +57,7 @@ enableEmoji = true
   # Note: image is not rendered if the resource(avatar image) is not found. No error is displayed.
   intro = "Fajrian"
   name = "fajrian"
-  description = "Cloud Engineer"
+  description = "SRE & Cloud Engineer"
 
 [[params.socialIcons]]
 name = "github"
