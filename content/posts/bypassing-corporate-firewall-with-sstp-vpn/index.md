@@ -28,6 +28,10 @@ sudo apt-get update && sudo apt-get -y upgrade && sudo apt install -y wget build
 
 <img src="download-softether-server.png" alt="download softether server" width="700" height="450">
 
+the top image is git, and below is r2 / object storage
+
+<img src="https://r2.ajinf.my.id/download-softether-server.png" alt="download softether server" width="700" height="450">
+
 ### Installing Softether Server
 1. Download softether latest version from this [link](https://www.softether-download.com/en.aspx?product=softether)
 ```sh
