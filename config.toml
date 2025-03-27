@@ -35,12 +35,12 @@ enableEmoji = true
     url = '/'
     weight = 10
   [[menu.main]]
-    pageRef="posts"
+    pageRef="Posts"
     name = 'Posts'
     url = '/posts/'
     weight = 20
   [[menu.main]]
-    pageRef="about"
+    pageRef="About"
     name = 'About'
     url = '/about/'
     weight = 30
