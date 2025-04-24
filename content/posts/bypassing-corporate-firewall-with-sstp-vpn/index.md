@@ -202,6 +202,7 @@ bool SaveSecurityLog false
 uint PacketLogSwitchType 0
 uint SecurityLogSwitchType 0
 uint ServerLogSwitchType 0
+bool SaveDebugLog false
 
 ## start the softether again
 systemctl start softether-vpn service
