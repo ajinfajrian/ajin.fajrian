@@ -191,6 +191,60 @@ VPN Server> SetHubPassword VPN
 VPN Server> SetEnumDeny 
 ```
 
+3. Disable logging (reduce disk i/o)
+```sh
+## disable the service first
+systemctl stop softether-vpn service
+
+## edit on vpn_server.config on /usr/local/vpnserver
+bool SavePacketLog false
+bool SaveSecurityLog false
+uint PacketLogSwitchType 0
+uint SecurityLogSwitchType 0
+uint ServerLogSwitchType 0
+
+## start the softether again
+systemctl start softether-vpn service
+```
+
+4. Disable unnecesarry vpn protocol (only enable sstp) and custom sstp port to 8443
+```sh
+## disable softether
+systemctl stop softether-vpn service
+
+## edit /usr/local/vpnserver/vpn_server.config
+DisableOpenVPNServer false
+string OpenVPN_UdpPortList $
+
+declare ListenerList
+{
+    declare Listener0
+    {
+        bool DisableDos false
+        bool Enabled true
+        uint Port 8443
+    }
+    declare Listener1
+    {
+        bool DisableDos false
+        bool Enabled false
+        uint Port 992
+    }
+    declare Listener2
+    {
+        bool DisableDos false
+        bool Enabled false
+        uint Port 1194
+    }
+    declare Listener3
+    {
+        bool DisableDos false
+        bool Enabled false
+        uint Port 5555
+    }
+}
+```
+
 
 #### Troubleshoot 
 1. Selinux context
